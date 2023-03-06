@@ -1,4 +1,4 @@
-# SRCD_2023_Mediation
+# SRCD_2023_SelfRegulation  
  Supplementary information and code for the SRCD 2023 poster on the indirect effect of parent depression on child emotional lability through child cognitive flexibility.  
  This repository contains:  
  1. Copy of the poster _(srcd_selfregulation.pdf)_  
