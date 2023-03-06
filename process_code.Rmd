@@ -1,0 +1,61 @@
+---
+title: "process"
+author: "Maitri Jain"
+date: '2022-06-28'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+source("../../ISDP:SRCD 2022/R_Scripts/processv41/PROCESS v4.1 for R/process.R") 
+
+df = read_csv("../data/df_standardized.csv")
+df_clean = df %>% filter(SubID != 3215 & SubID != 3285)
+df_clean_clean = df_clean %>% filter(!is.na(PHQ9_total)) %>% filter(!is.na(erc_LabilNeg)) %>% filter(!is.na(BRIEFP_FI))  %>% filter(!is.na(ParentAge))  %>% filter(!is.na(childAge))
+
+df_clean_clean = df_clean_clean %>% mutate(
+  SubID = as.character(SubID),
+  country = as.factor(country),
+  RelStatus_chr = as.factor(RelStatus_chr),
+  HouseholdIncome = as.factor(HouseholdIncome),
+  Married = as.factor(Married),
+  parentGender_chr = as.factor(parentGender_chr),
+  ParentRace_string = as.factor(ParentRace_string),
+  ChildRace_string = as.factor(ChildRace_string),
+  childGender_chr = as.factor(childGender_chr),
+  PHQ9_severity = as.factor(PHQ9_severity),
+  GAD_severity = as.factor(GAD_severity)
+)
+
+
+```
+
+# Demographics
+```{r}
+
+summary(df_clean_clean$country)
+
+table(df_clean_clean$country)
+
+table(df_clean_clean$study)
+
+table(df_clean_clean$HouseholdIncome)
+
+table(df_clean_clean$Married)
+
+table(df_clean_clean$ChildRace_string)
+
+describe(df_clean_clean$childAge)
+```
+
+# looking at lability-negativity instead. 
+```{r}
+summary(lm(erc_LabilNeg ~ PHQ9_total + ParentAge + childAge, data = df))
+
+process(data = df, y = "erc_LabilNeg", x = "PHQ9_total", m = "BRIEFP_FI", model = 4, cov = c("ParentAge", "childAge"))
+```
+
